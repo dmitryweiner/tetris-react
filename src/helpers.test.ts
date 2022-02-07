@@ -1,15 +1,18 @@
 import {
   BAR,
-  copyField,
+  copyMatrix,
   createGameField,
   EMPTY_FIELD,
   getRandomFigureID,
   HEIGHT,
-  L_SHAPE, processField,
+  L_SHAPE,
+  ORIENTATION,
   putFigureOnField,
+  ROTATE_DIRECTION,
+  rotateMatrix,
   S_SHAPE,
   SQUARE,
-  TRI, TURN,
+  TRI,
   WIDTH
 } from "./helpers";
 
@@ -28,11 +31,29 @@ test("getRandomFigureID", () => {
   }
 });
 
-test("copyField", () => {
+test("copyMatrix", () => {
   const field = createGameField();
-  const copiedField = copyField(field);
+  const copiedField = copyMatrix(field);
   expect(field === copiedField).toBeFalsy();
   expect(field[0] === copiedField[0]).toBeFalsy();
+});
+
+test("rotateMatrix", () => {
+  const initialMatrix = [
+    [0, 0, 1],
+    [0, 0, 0],
+    [0, 0, 0]
+  ];
+
+  let matrix = rotateMatrix(initialMatrix, ROTATE_DIRECTION.CLOCKWISE);
+  expect(matrix === initialMatrix).toBeFalsy();
+  expect(matrix[2][2]).toBe(1);
+  expect(matrix[0][2]).toBe(0);
+
+  matrix = rotateMatrix(initialMatrix, ROTATE_DIRECTION.COUNTERCLOCKWISE);
+  expect(matrix === initialMatrix).toBeFalsy();
+  expect(matrix[0][0]).toBe(1);
+  expect(matrix[0][2]).toBe(0);
 });
 
 test("putFigureOnField BAR", () => {
@@ -47,6 +68,12 @@ test("putFigureOnField BAR", () => {
   expect(field[2][1]).toEqual(BAR);
   expect(field[3][1]).toEqual(BAR);
   expect(field[4][1]).toEqual(BAR);
+
+  field = putFigureOnField(createGameField(), 0, 0, BAR, ORIENTATION.LEFT);
+  expect(field[0][0]).toEqual(BAR);
+  expect(field[0][1]).toEqual(BAR);
+  expect(field[0][2]).toEqual(BAR);
+  expect(field[0][3]).toEqual(BAR);
 });
 
 test("putFigureOnField L", () => {
@@ -61,6 +88,12 @@ test("putFigureOnField L", () => {
   expect(field[2][1]).toEqual(L_SHAPE);
   expect(field[3][1]).toEqual(L_SHAPE);
   expect(field[3][2]).toEqual(L_SHAPE);
+
+  field = putFigureOnField(createGameField(), 0, 0, L_SHAPE, ORIENTATION.DOWN);
+  expect(field[0][0]).toEqual(L_SHAPE);
+  expect(field[0][1]).toEqual(L_SHAPE);
+  expect(field[1][1]).toEqual(L_SHAPE);
+  expect(field[2][1]).toEqual(L_SHAPE);
 });
 
 test("putFigureOnField S", () => {
@@ -81,6 +114,14 @@ test("putFigureOnField TRI", () => {
   expect(field[1][0]).toEqual(TRI);
   expect(field[1][1]).toEqual(TRI);
   expect(field[1][2]).toEqual(TRI);
+
+  field = putFigureOnField(createGameField(), 0, 0, TRI, ORIENTATION.RIGHT);
+  expect(field[0][0]).toEqual(TRI);
+  expect(field[0][1]).toEqual(EMPTY_FIELD);
+  expect(field[1][0]).toEqual(TRI);
+  expect(field[1][1]).toEqual(TRI);
+  expect(field[2][0]).toEqual(TRI);
+  expect(field[2][1]).toEqual(EMPTY_FIELD);
 });
 
 test("putFigureOnField SQUARE", () => {

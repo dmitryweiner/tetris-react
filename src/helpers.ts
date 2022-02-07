@@ -57,7 +57,7 @@ export const FIGURES = {
   }
 };
 
-export type GameFiled = Number[][];
+export type GameFiled = number[][];
 
 export const TURN = {
   NO_ACTION: 0,
@@ -69,6 +69,20 @@ export const TURN = {
 export type Action = keyof typeof TURN;
 export type Turn = typeof TURN[Action];
 
+export const ORIENTATION = {
+  UP: 0,
+  RIGHT: 1,
+  DOWN: 2,
+  LEFT: 3
+};
+export type Orientation = typeof ORIENTATION[keyof typeof ORIENTATION];
+
+export const ROTATE_DIRECTION = {
+  CLOCKWISE: 0,
+  COUNTERCLOCKWISE: 1
+};
+export type RotateDirection = typeof ROTATE_DIRECTION[keyof typeof ROTATE_DIRECTION];
+
 export function createGameField(): GameFiled {
   const result = [];
   for (let i = 0; i < HEIGHT; i++) {
@@ -77,7 +91,7 @@ export function createGameField(): GameFiled {
       result[i][j] = EMPTY_FIELD
     }
   }
-  return  result;
+  return result;
 }
 
 export function getRandomFigureID(): FigureId {
@@ -85,21 +99,57 @@ export function getRandomFigureID(): FigureId {
   return Math.ceil(Math.random() * FIGURES_COUNT) as FigureId;
 }
 
-export function copyField(field: GameFiled): GameFiled {
+export function copyMatrix(matrix: number[][]): number[][] {
   const result = [];
-  for(let i = 0; i < WIDTH; i++) {
-    result[i] = [...field[i]];
+  for (let i = 0; i < matrix.length; i++) {
+    result[i] = [...matrix[i]];
   }
   return result;
 }
 
-export function putFigureOnField(field: GameFiled, x: number, y: number, figureID: FigureId): GameFiled {
-  const fieldCopy = copyField(field);
+export function rotateMatrix(matrix: number[][], direction: RotateDirection): number[][] {
+  if (direction === ROTATE_DIRECTION.CLOCKWISE) {
+    return matrix[0].map((val, index) => matrix.map(row => row[index]).reverse());
+  }
+  return matrix[0].map((val, index) => matrix.map(row => row[row.length - 1 - index]));
+}
+
+export function putFigureOnField(
+  field: GameFiled,
+  x: number,
+  y: number,
+  figureID: FigureId,
+  orientation?: Orientation
+): GameFiled {
+
+  if (orientation === undefined) {
+    orientation = ORIENTATION.UP;
+  }
+
+  const fieldCopy = copyMatrix(field);
   const figure = FIGURES[figureID];
-  for (let i = 0; i < figure.height; i++) {
-    for (let j = 0; j < figure.width; j++) {
-      if (figure.data[i][j] !== EMPTY_FIELD) {
-        fieldCopy[i + x][j + y] = figure.data[i][j];
+  let matrix = figure.data;
+
+  switch (orientation) {
+    case ORIENTATION.RIGHT: {
+      matrix = rotateMatrix(matrix, ROTATE_DIRECTION.CLOCKWISE);
+      break;
+    }
+    case ORIENTATION.DOWN: {
+      matrix = rotateMatrix(matrix, ROTATE_DIRECTION.CLOCKWISE);
+      matrix = rotateMatrix(matrix, ROTATE_DIRECTION.CLOCKWISE);
+      break;
+    }
+    case ORIENTATION.LEFT: {
+      matrix = rotateMatrix(matrix, ROTATE_DIRECTION.COUNTERCLOCKWISE);
+      break;
+    }
+  }
+
+  for (let i = 0; i < matrix.length; i++) {
+    for (let j = 0; j < matrix[i].length; j++) {
+      if (matrix[i][j] !== EMPTY_FIELD) {
+        fieldCopy[i + x][j + y] = matrix[i][j];
       }
     }
   }
