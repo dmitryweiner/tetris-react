@@ -1,5 +1,5 @@
 import {
-  BAR,
+  BAR, canPutFigureOnField,
   copyMatrix,
   createGameField,
   EMPTY_FIELD,
@@ -130,4 +130,14 @@ test("putFigureOnField SQUARE", () => {
   expect(field[0][1]).toEqual(SQUARE);
   expect(field[1][0]).toEqual(SQUARE);
   expect(field[1][1]).toEqual(SQUARE);
+});
+
+test("canPutFigureOnField", () => {
+  const field = createGameField();
+  expect(canPutFigureOnField(field, 0, 0, SQUARE)).toBeTruthy();
+  field[0][0] = BAR;
+  expect(canPutFigureOnField(field, 0, 0, SQUARE)).toBeFalsy();
+
+  expect(canPutFigureOnField(field, 0, 0, L_SHAPE)).toBeFalsy();
+  expect(canPutFigureOnField(field, 0, 0, L_SHAPE, ORIENTATION.LEFT)).toBeTruthy();
 });

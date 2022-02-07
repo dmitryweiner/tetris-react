@@ -114,22 +114,7 @@ export function rotateMatrix(matrix: number[][], direction: RotateDirection): nu
   return matrix[0].map((val, index) => matrix.map(row => row[row.length - 1 - index]));
 }
 
-export function putFigureOnField(
-  field: GameFiled,
-  x: number,
-  y: number,
-  figureID: FigureId,
-  orientation?: Orientation
-): GameFiled {
-
-  if (orientation === undefined) {
-    orientation = ORIENTATION.UP;
-  }
-
-  const fieldCopy = copyMatrix(field);
-  const figure = FIGURES[figureID];
-  let matrix = figure.data;
-
+function getFigureDots(matrix: number[][], orientation: Orientation): number[][] {
   switch (orientation) {
     case ORIENTATION.RIGHT: {
       matrix = rotateMatrix(matrix, ROTATE_DIRECTION.CLOCKWISE);
@@ -145,6 +130,26 @@ export function putFigureOnField(
       break;
     }
   }
+  return matrix;
+}
+
+
+export function putFigureOnField(
+  field: GameFiled,
+  x: number,
+  y: number,
+  figureID: FigureId,
+  orientation?: Orientation
+): GameFiled {
+
+  if (orientation === undefined) {
+    orientation = ORIENTATION.UP;
+  }
+
+  const fieldCopy = copyMatrix(field);
+  const figure = FIGURES[figureID];
+  let matrix = figure.data;
+  matrix = getFigureDots(matrix, orientation);
 
   for (let i = 0; i < matrix.length; i++) {
     for (let j = 0; j < matrix[i].length; j++) {
@@ -154,4 +159,45 @@ export function putFigureOnField(
     }
   }
   return fieldCopy;
+}
+
+export function canPutFigureOnField(
+  field: GameFiled,
+  x: number,
+  y: number,
+  figureID: FigureId,
+  orientation?: Orientation
+): boolean {
+  if (orientation === undefined) {
+    orientation = ORIENTATION.UP;
+  }
+
+  if (x < 0 || y < 0) {
+    return false;
+  }
+
+  const figure = FIGURES[figureID];
+
+  if (orientation === ORIENTATION.RIGHT || orientation === ORIENTATION.LEFT) {
+    if (x + figure.height > WIDTH) {
+      return false;
+    }
+  } else {
+    if (x + figure.width > WIDTH) {
+      return false;
+    }
+  }
+
+  let matrix = figure.data;
+  matrix = getFigureDots(matrix, orientation);
+
+  for (let i = 0; i < matrix.length; i++) {
+    for (let j = 0; j < matrix[i].length; j++) {
+      if (matrix[i][j] !== EMPTY_FIELD && field[i + x][j + y] !== EMPTY_FIELD) {
+        return false;
+      }
+    }
+  }
+
+  return true;
 }
