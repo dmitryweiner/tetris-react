@@ -10,7 +10,7 @@ import {
   FigureId, GameFiled, getFigureMiddlePosition,
   getRandomFigureID,
   ORIENTATION,
-  Orientation, putFigureOnField, rotateOrientation,
+  Orientation, processGameField, putFigureOnField, rotateOrientation,
 } from "./helpers";
 
 enum GAME_STATE {
@@ -173,10 +173,14 @@ function App() {
             };
           }
           case GAME_STATE.TOUCH: {
-            // TODO: count score, process game field
+            // count score, process game field
+            const {scoreToAdd, processedField} = processGameField(state.gameField);
+
+
             return {
               ...state,
-              gameFieldWithoutCurrentFigure: state.gameField,
+              gameFieldWithoutCurrentFigure: processedField,
+              score: state.score + scoreToAdd,
               gameState: GAME_STATE.FIGURE_CHOICE
             };
           }
@@ -193,6 +197,9 @@ function App() {
   return (
     <div className="App">
       <h3>Tetris v0.1</h3>
+      <div>
+        Score: <b>{appState.score}</b>
+      </div>
       <GameField field={appState.gameField}/>
       <Controls onChange={handleButtons}/>
     </div>

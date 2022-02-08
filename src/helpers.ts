@@ -219,3 +219,29 @@ export function rotateOrientation(orientation: Orientation): Orientation {
     default: return ORIENTATION.UP;
   }
 }
+
+export function processGameField(field: GameFiled): {scoreToAdd: number, processedField: GameFiled} {
+  const copiedField = copyMatrix(field);
+  const processedField = [];
+  let scoreToAdd = 0;
+
+  // delete all filled
+  for(let i = 0; i < HEIGHT; i++) {
+    if (copiedField[i].every(element => element !== EMPTY_FIELD)) {
+      scoreToAdd++;
+      continue;
+    }
+    processedField.push(copiedField[i]);
+  }
+
+  if (scoreToAdd) {
+    for (let i = 0; i <= HEIGHT - processedField.length; i++) {
+      processedField.unshift(new Array(WIDTH).fill(EMPTY_FIELD));
+    }
+  }
+
+  return {
+    scoreToAdd,
+    processedField
+  };
+}
