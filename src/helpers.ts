@@ -193,6 +193,9 @@ export function canPutFigureOnField(
 
   for (let i = 0; i < matrix.length; i++) {
     for (let j = 0; j < matrix[i].length; j++) {
+      if ((i + y) >= HEIGHT || (j + x) >= WIDTH) {
+        return false;
+      }
       if (matrix[i][j] !== EMPTY_FIELD && field[i + y][j + x] !== EMPTY_FIELD) {
         return false;
       }
@@ -205,4 +208,14 @@ export function canPutFigureOnField(
 export function getFigureMiddlePosition(figureId: FigureId): number {
   const figure = FIGURES[figureId];
   return Math.round(WIDTH / 2 - figure.width / 2);
+}
+
+export function rotateOrientation(orientation: Orientation): Orientation {
+  switch (orientation) {
+    case ORIENTATION.UP: return ORIENTATION.RIGHT;
+    case ORIENTATION.RIGHT: return ORIENTATION.DOWN;
+    case ORIENTATION.DOWN: return ORIENTATION.LEFT;
+    case ORIENTATION.LEFT: return ORIENTATION.UP;
+    default: return ORIENTATION.UP;
+  }
 }

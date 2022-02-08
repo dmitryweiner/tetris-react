@@ -5,11 +5,12 @@ import React, {useEffect, useState} from 'react';
 import Controls from "./components/Controls";
 import GameField from "./components/GameField";
 import {
+  canPutFigureOnField,
   createGameField,
   FigureId, GameFiled, getFigureMiddlePosition,
   getRandomFigureID,
   ORIENTATION,
-  Orientation, putFigureOnField,
+  Orientation, putFigureOnField, rotateOrientation,
 } from "./helpers";
 
 enum GAME_STATE {
@@ -20,10 +21,11 @@ enum GAME_STATE {
   GAME_OVER
 }
 
-enum USER_ACTION {
+export enum USER_ACTION {
   IDLE,
   MOVE_RIGHT,
   MOVE_LEFT,
+  MOVE_DOWN,
   TURNING
 }
 
@@ -78,6 +80,42 @@ function App() {
     userAction: USER_ACTION.IDLE
   });
 
+  const handleButtons = (userAction: USER_ACTION) => {
+    setAppState((state) => {
+      const figure = {
+        ...state.figure
+      };
+      switch (userAction) {
+        case USER_ACTION.MOVE_LEFT: {
+          figure.x--;
+          break;
+        }
+        case USER_ACTION.MOVE_RIGHT: {
+          figure.x++;
+          break;
+        }
+        case USER_ACTION.MOVE_DOWN: {
+          figure.y = figure.y + 2;
+          break;
+        }
+        case USER_ACTION.TURNING: {
+          figure.orientation = rotateOrientation(figure.orientation);
+          break;
+        }
+      }
+
+      // check if can do move
+      if (canPutFigureOnField(state.gameFieldWithoutCurrentFigure, figure.x, figure.y, figure.id, figure.orientation)) {
+        return {
+          ...state,
+          gameField: putFigureOnField(state.gameFieldWithoutCurrentFigure, figure.x, figure.y, figure.id, figure.orientation),
+          figure,
+        };
+      }
+      return state;
+    });
+  };
+
   useEffect(() => {
     const intervalID = setInterval(() => {
       setAppState((state) => {
@@ -91,14 +129,20 @@ function App() {
             };
           }
           case GAME_STATE.FIGURE_CHOICE: {
-            // TODO: check if game over
-
             const figure = {
               id: state.nextFigureId,
               x: getFigureMiddlePosition(state.nextFigureId),
               y: 0,
               orientation: ORIENTATION.UP
             };
+
+            // check if game over
+            if (!canPutFigureOnField(state.gameFieldWithoutCurrentFigure, figure.x, figure.y, figure.id, figure.orientation)) {
+              return {
+                ...state,
+                gameState: GAME_STATE.GAME_OVER,
+              };
+            }
 
             return {
               ...state,
@@ -109,21 +153,35 @@ function App() {
             };
           }
           case GAME_STATE.FALLING: {
-            // TODO: check if touched
-            // TODO: read user actions
-
             const figure = {
-                ...state.figure,
-                y: state.figure.y + 1,
-              };
+              ...state.figure,
+              y: state.figure.y + 1,
+            };
 
+            // check if touched
+            if (!canPutFigureOnField(state.gameFieldWithoutCurrentFigure, figure.x, figure.y, figure.id, figure.orientation)) {
               return {
+                ...state,
+                gameState: GAME_STATE.TOUCH
+              };
+            }
+
+            return {
               ...state,
               gameField: putFigureOnField(state.gameFieldWithoutCurrentFigure, figure.x, figure.y, figure.id, figure.orientation),
               figure,
             };
           }
-          default: return state;
+          case GAME_STATE.TOUCH: {
+            // TODO: count score, process game field
+            return {
+              ...state,
+              gameFieldWithoutCurrentFigure: state.gameField,
+              gameState: GAME_STATE.FIGURE_CHOICE
+            };
+          }
+          default:
+            return state;
         }
       });
     }, 1000);
@@ -134,8 +192,9 @@ function App() {
 
   return (
     <div className="App">
+      <h3>Tetris v0.1</h3>
       <GameField field={appState.gameField}/>
-      <Controls onChange={(orientation) => console.log(orientation)}/>
+      <Controls onChange={handleButtons}/>
     </div>
   );
 }

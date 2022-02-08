@@ -7,7 +7,7 @@ export type GameFieldProps = {
 };
 
 export default function GameField({field}: GameFieldProps) {
-  return <>
+  return <div className={styles.container}>
     {field.map((row, rowIndex) => (
       <div key={rowIndex} className={styles.row}>
         {row.map((dot, dotIndex) => (
@@ -15,5 +15,5 @@ export default function GameField({field}: GameFieldProps) {
         ))}
       </div>
     ))}
-  </>;
+  </div>;
 }
