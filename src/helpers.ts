@@ -154,7 +154,7 @@ export function putFigureOnField(
   for (let i = 0; i < matrix.length; i++) {
     for (let j = 0; j < matrix[i].length; j++) {
       if (matrix[i][j] !== EMPTY_FIELD) {
-        fieldCopy[i + x][j + y] = matrix[i][j];
+        fieldCopy[i + y][j + x] = matrix[i][j];
       }
     }
   }
@@ -193,11 +193,16 @@ export function canPutFigureOnField(
 
   for (let i = 0; i < matrix.length; i++) {
     for (let j = 0; j < matrix[i].length; j++) {
-      if (matrix[i][j] !== EMPTY_FIELD && field[i + x][j + y] !== EMPTY_FIELD) {
+      if (matrix[i][j] !== EMPTY_FIELD && field[i + y][j + x] !== EMPTY_FIELD) {
         return false;
       }
     }
   }
 
   return true;
+}
+
+export function getFigureMiddlePosition(figureId: FigureId): number {
+  const figure = FIGURES[figureId];
+  return Math.round(WIDTH / 2 - figure.width / 2);
 }

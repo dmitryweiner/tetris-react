@@ -3,6 +3,7 @@ import {
   copyMatrix,
   createGameField,
   EMPTY_FIELD,
+  getFigureMiddlePosition,
   getRandomFigureID,
   HEIGHT,
   L_SHAPE,
@@ -141,3 +142,7 @@ test("canPutFigureOnField", () => {
   expect(canPutFigureOnField(field, 0, 0, L_SHAPE)).toBeFalsy();
   expect(canPutFigureOnField(field, 0, 0, L_SHAPE, ORIENTATION.LEFT)).toBeTruthy();
 });
+
+test("getFigureMiddlePosition", () => {
+  expect(getFigureMiddlePosition(BAR)).toBe(WIDTH - 5);
+})

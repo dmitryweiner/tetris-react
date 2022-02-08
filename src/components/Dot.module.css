@@ -1,0 +1,10 @@
+.dot {
+    width: 2.5vmin;
+    height: 2.5vmin;
+    margin: 0.1vmin;
+    background-color: #61dafb;
+}
+
+.filled {
+    background-color: #282c34;
+}
