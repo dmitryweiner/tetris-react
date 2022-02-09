@@ -191,7 +191,7 @@ function App() {
 
   return (
     <div className="App">
-      <h3>Tetris v0.4</h3>
+      <h3>Tetris v0.5</h3>
       <div className="upper-block">
         <div>
           Score: <b>{appState.score}</b>

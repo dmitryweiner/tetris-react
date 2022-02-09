@@ -235,7 +235,7 @@ export function processGameField(field: GameFiled): {scoreToAdd: number, process
   }
 
   if (scoreToAdd) {
-    for (let i = 0; i <= HEIGHT - processedField.length; i++) {
+    for (let i = 0; i < scoreToAdd; i++) {
       processedField.unshift(new Array(WIDTH).fill(EMPTY_FIELD));
     }
   }
