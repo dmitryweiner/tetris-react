@@ -28,7 +28,9 @@
       "react-app",
       "react-app/jest"
     ],
-    "plugins": ["simple-import-sort"],
+    "plugins": [
+      "simple-import-sort"
+    ],
     "rules": {
       "simple-import-sort/imports": "error"
     }
@@ -47,6 +49,7 @@
   },
   "devDependencies": {
     "eslint": "^8.8.0",
+    "eslint-config-react-app": "^7.0.0",
     "eslint-plugin-simple-import-sort": "^7.0.0"
   }
 }
