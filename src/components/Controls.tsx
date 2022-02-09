@@ -13,6 +13,7 @@ export type ControlsProps = {
 export default function Controls({onChange}: ControlsProps) {
   const downTimer: {current: NodeJS.Timeout | null} = useRef(null);
 
+  useKeyPressEvent("p", () => onChange(USER_ACTION.PAUSE));
   useKeyPressEvent("ArrowLeft", () => onChange(USER_ACTION.MOVE_LEFT));
   useKeyPressEvent("ArrowRight", () => onChange(USER_ACTION.MOVE_RIGHT));
 

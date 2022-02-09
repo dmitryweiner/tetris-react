@@ -17,7 +17,8 @@ import {
 
 enum GAME_STATE {
   FALLING,
-  GAME_OVER
+  GAME_OVER,
+  PAUSED
 }
 
 export enum USER_ACTION {
@@ -25,7 +26,8 @@ export enum USER_ACTION {
   MOVE_RIGHT,
   MOVE_LEFT,
   MOVE_DOWN,
-  TURNING
+  TURNING,
+  PAUSE
 }
 
 type AppState = {
@@ -86,8 +88,17 @@ function App() {
   const [appState, setAppState] = useState<AppState>(getInitialAppState());
 
   const handleButtons = (userAction: USER_ACTION) => {
-    if (appState.gameState !== GAME_STATE.FALLING) {
+    if (appState.gameState === GAME_STATE.GAME_OVER) {
       return;
+    }
+
+    if (userAction === USER_ACTION.PAUSE) {
+      return setAppState((state) => {
+        return {
+          ...state,
+          gameState: state.gameState === GAME_STATE.PAUSED ? GAME_STATE.FALLING : GAME_STATE.PAUSED
+        }
+      });
     }
 
     setAppState((state) => {
@@ -179,6 +190,7 @@ function App() {
               score: state.score + scoreToAdd,
             };
           }
+          case GAME_STATE.PAUSED:
           default:
             return state;
         }
