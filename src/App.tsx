@@ -188,10 +188,12 @@ function App() {
   return (
     <div className="App">
       <h3>Tetris v0.1</h3>
-      <div>
-        Score: <b>{appState.score}</b>
+      <div className="upper-block">
+        <div>
+          Score: <b>{appState.score}</b>
+        </div>
+        <NextFigure figureId={appState.nextFigureId}/>
       </div>
-      <NextFigure figureId={appState.nextFigureId}/>
       <GameField field={appState.gameField}/>
       <Controls onChange={handleButtons}/>
       <GameOver visible={appState.gameState === GAME_STATE.GAME_OVER} onClick={playAgain}/>

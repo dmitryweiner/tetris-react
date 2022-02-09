@@ -13,10 +13,15 @@ export default function Controls({onChange}: ControlsProps) {
   useKeyPressEvent("ArrowDown", () => onChange(USER_ACTION.MOVE_DOWN));
   useKeyPressEvent("ArrowUp", () => onChange(USER_ACTION.TURNING));
 
-  return <div className={styles.container}>
+  return <>
+    <div className={styles.container}>
     <button onClick={() => onChange(USER_ACTION.MOVE_LEFT)} className={styles.control}>←</button>
     <button onClick={() => onChange(USER_ACTION.TURNING)} className={styles.control}>↻</button>
     <button onClick={() => onChange(USER_ACTION.MOVE_RIGHT)} className={styles.control}>→</button>
     <button onClick={() => onChange(USER_ACTION.MOVE_DOWN)} className={styles.control}>↓</button>
   </div>
+    <div className={styles.message}>
+      Use arrow keys on the keyboard to play.
+    </div>
+    </>
 }

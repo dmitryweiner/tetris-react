@@ -1,20 +1,20 @@
 .container {
     position: absolute;
     width: 100%;
-    top: 50%;
+    top: calc(50% - 10vh);
 }
 
 .message {
     margin: 0 auto;
-    padding: 5vmin;
+    padding: 5vh;
     border-radius: 5px;
     border: 1px dotted black;
     background-color: antiquewhite;
-    width: 20vmin;
+    width: 20vh;
 }
 
 @media screen and (max-width: 800px) {
     .message {
-        width: 80%;
+        width: 70%;
     }
 }

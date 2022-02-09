@@ -1,19 +1,35 @@
 .container {
-    margin: 1vmin;
+    margin: 1vh;
 }
 
 button.control {
-    width: 5vmin;
-    height: 5vmin;
+    width: 5vh;
+    height: 5vh;
 }
 
 button.control:not(:last-child) {
-    margin-right: 1vmin;
+    margin-right: 1vh;
+}
+
+.message {
+    font-size: 1.5vh;
+    color: darkgray;
 }
 
 @media screen and (max-width: 800px) {
     button.control {
-        width: 10vmin;
-        height: 10vmin;
+        width: 5vh;
+        height: 5vh;
+    }
+
+    .container {
+        flex-direction: row;
+        justify-content: space-evenly;
+        padding-right: 5vh;
+        padding-left: 5vh;
+    }
+
+    .message {
+        display: none;
     }
 }

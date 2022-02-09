@@ -1,7 +1,7 @@
 .dot {
-    width: 2.5vmin;
-    height: 2.5vmin;
-    margin: 0.1vmin;
+    width: 2.5vh;
+    height: 2.5vh;
+    margin: 0.1vh;
     background-color: #61dafb;
 }
 
@@ -27,8 +27,8 @@
 
 @media screen and (max-width: 800px) {
     .dot {
-        width: 6vmin;
-        height: 6vmin;
-        margin: 0.3vmin;
+        width: 3vh;
+        height: 3vh;
+        margin: 0.2vh;
     }
 }

@@ -2,8 +2,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 1vmin;
-    min-height: 15vmin;
+    margin: 1vh;
+    min-height: 10vh;
 }
 
 .row {
@@ -13,6 +13,7 @@
 
 @media screen and (max-width: 800px) {
     .container {
-        min-height: 30vmin;
+        min-height: 14vh;
+        min-width: 14vh;
     }
 }
