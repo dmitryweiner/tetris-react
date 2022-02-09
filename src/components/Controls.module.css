@@ -1,0 +1,19 @@
+.container {
+    margin: 1vmin;
+}
+
+button.control {
+    width: 5vmin;
+    height: 5vmin;
+}
+
+button.control:not(:last-child) {
+    margin-right: 1vmin;
+}
+
+@media screen and (max-width: 800px) {
+    button.control {
+        width: 10vmin;
+        height: 10vmin;
+    }
+}

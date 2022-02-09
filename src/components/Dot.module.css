@@ -5,6 +5,30 @@
     background-color: #61dafb;
 }
 
-.filled {
-    background-color: #282c34;
+.bar {
+    background-color: #e23c3c;
+}
+
+.l-shape {
+    background-color: #3476b4;
+}
+
+.s-shape {
+    background-color: #31b451;
+}
+
+.square {
+    background-color: #7e3ce2;
+}
+
+.tri {
+    background-color: #e28f3c;
+}
+
+@media screen and (max-width: 800px) {
+    .dot {
+        width: 6vmin;
+        height: 6vmin;
+        margin: 0.3vmin;
+    }
 }
