@@ -120,6 +120,10 @@ function App() {
     });
   };
 
+  const playAgain = () => {
+    setAppState(getInitialAppState());
+  }
+
   useEffect(() => {
     const intervalID = setInterval(() => {
       setAppState((state) => {
@@ -185,6 +189,12 @@ function App() {
       <div>
         Score: <b>{appState.score}</b>
       </div>
+      {appState.gameState === GAME_STATE.GAME_OVER && (
+        <div>
+          <h4 style={{color: "#AD0000"}}>Game over!</h4>
+          <button onClick={playAgain}>Play again?</button>
+        </div>
+      )}
       <GameField field={appState.gameField}/>
       <Controls onChange={handleButtons}/>
     </div>
