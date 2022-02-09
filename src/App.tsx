@@ -14,10 +14,7 @@ import {
 } from "./helpers";
 
 enum GAME_STATE {
-  IDLE,
-  FIGURE_CHOICE,
   FALLING,
-  TOUCH,
   GAME_OVER
 }
 
@@ -41,7 +38,26 @@ type AppState = {
   },
   nextFigureId: FigureId,
   score: number,
-  userAction: USER_ACTION
+}
+
+function getInitialAppState(): AppState {
+  const figureID = getRandomFigureID();
+
+  const figure = {
+    id: figureID,
+    x: getFigureMiddlePosition(figureID),
+    y: 0,
+    orientation: ORIENTATION.UP
+  };
+
+  return {
+    gameField: createGameField(),
+    gameFieldWithoutCurrentFigure: createGameField(),
+    gameState: GAME_STATE.FALLING,
+    figure,
+    nextFigureId: getRandomFigureID(),
+    score: 0,
+  };
 }
 
 /**
@@ -65,20 +81,7 @@ type AppState = {
  *    Сообщение: начать игру заново?
  **/
 function App() {
-  const [appState, setAppState] = useState<AppState>({
-    gameField: createGameField(),
-    gameFieldWithoutCurrentFigure: createGameField(),
-    gameState: GAME_STATE.IDLE,
-    figure: {
-      id: getRandomFigureID(),
-      x: 0,
-      y: 0,
-      orientation: ORIENTATION.UP
-    },
-    nextFigureId: getRandomFigureID(),
-    score: 0,
-    userAction: USER_ACTION.IDLE
-  });
+  const [appState, setAppState] = useState<AppState>(getInitialAppState());
 
   const handleButtons = (userAction: USER_ACTION) => {
     setAppState((state) => {
@@ -95,6 +98,7 @@ function App() {
           break;
         }
         case USER_ACTION.MOVE_DOWN: {
+          // TODO: move till touchdown
           figure.y = figure.y + 2;
           break;
         }
@@ -121,15 +125,26 @@ function App() {
       setAppState((state) => {
         console.log("Tick", state);
         switch (state.gameState) {
-          case GAME_STATE.IDLE: {
-            return {
-              ...state,
-              gameState: GAME_STATE.FIGURE_CHOICE,
-
-            };
-          }
-          case GAME_STATE.FIGURE_CHOICE: {
+          case GAME_STATE.FALLING: {
             const figure = {
+              ...state.figure,
+              y: state.figure.y + 1,
+            };
+
+            // check if not touched
+            if (canPutFigureOnField(state.gameFieldWithoutCurrentFigure, figure.x, figure.y, figure.id, figure.orientation)) {
+              return {
+                ...state,
+                gameField: putFigureOnField(state.gameFieldWithoutCurrentFigure, figure.x, figure.y, figure.id, figure.orientation),
+                figure,
+              };
+            }
+
+            // count score, process game field
+            const {scoreToAdd, processedField} = processGameField(state.gameField);
+
+            // create new figure
+            const newFigure = {
               id: state.nextFigureId,
               x: getFigureMiddlePosition(state.nextFigureId),
               y: 0,
@@ -137,7 +152,7 @@ function App() {
             };
 
             // check if game over
-            if (!canPutFigureOnField(state.gameFieldWithoutCurrentFigure, figure.x, figure.y, figure.id, figure.orientation)) {
+            if (!canPutFigureOnField(processedField, newFigure.x, newFigure.y, newFigure.id, newFigure.orientation)) {
               return {
                 ...state,
                 gameState: GAME_STATE.GAME_OVER,
@@ -147,41 +162,11 @@ function App() {
             return {
               ...state,
               gameState: GAME_STATE.FALLING,
-              gameField: putFigureOnField(state.gameFieldWithoutCurrentFigure, figure.x, figure.y, figure.id, figure.orientation),
-              figure,
+              gameField: putFigureOnField(processedField, newFigure.x, newFigure.y, newFigure.id, newFigure.orientation),
+              figure: newFigure,
               nextFigureId: getRandomFigureID(),
-            };
-          }
-          case GAME_STATE.FALLING: {
-            const figure = {
-              ...state.figure,
-              y: state.figure.y + 1,
-            };
-
-            // check if touched
-            if (!canPutFigureOnField(state.gameFieldWithoutCurrentFigure, figure.x, figure.y, figure.id, figure.orientation)) {
-              return {
-                ...state,
-                gameState: GAME_STATE.TOUCH
-              };
-            }
-
-            return {
-              ...state,
-              gameField: putFigureOnField(state.gameFieldWithoutCurrentFigure, figure.x, figure.y, figure.id, figure.orientation),
-              figure,
-            };
-          }
-          case GAME_STATE.TOUCH: {
-            // count score, process game field
-            const {scoreToAdd, processedField} = processGameField(state.gameField);
-
-
-            return {
-              ...state,
               gameFieldWithoutCurrentFigure: processedField,
               score: state.score + scoreToAdd,
-              gameState: GAME_STATE.FIGURE_CHOICE
             };
           }
           default:
