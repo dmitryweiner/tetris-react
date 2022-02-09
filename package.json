@@ -22,7 +22,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "eslint": "eslint src/**/*.{js,jsx,ts,tsx} --fix"
+    "eslint": "eslint src/**/*.{js,jsx,ts,tsx} --fix",
+    "deploy": "rm -rf docs && react-scripts build && mv build docs"
   },
   "eslintConfig": {
     "extends": [
