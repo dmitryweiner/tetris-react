@@ -133,7 +133,7 @@ function App() {
   useEffect(() => {
     const intervalID = setInterval(() => {
       setAppState((state) => {
-        //console.log("Tick", state);
+        console.log("Tick", state);
         switch (state.gameState) {
           case GAME_STATE.FALLING: {
             const figure = {
