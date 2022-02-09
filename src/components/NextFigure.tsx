@@ -12,7 +12,7 @@ export default function NextFigure({figureId}: NextFigureProps) {
     {figure.data.map((row, rowIndex) => (
       <div className={styles.row} key={rowIndex}>
         {row.map((dot, dotIndex) => (
-          <Dot dot={dot} key={dotIndex}/>
+          <Dot dot={dot} showBackground={false} key={dotIndex}/>
         ))}
       </div>
     ))}

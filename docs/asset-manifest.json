@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/tetris-react/static/css/main.dda991fc.css",
-    "main.js": "/tetris-react/static/js/main.852fce21.js",
+    "main.css": "/tetris-react/static/css/main.0843e998.css",
+    "main.js": "/tetris-react/static/js/main.ef64fb6f.js",
     "static/js/787.031b57d2.chunk.js": "/tetris-react/static/js/787.031b57d2.chunk.js",
     "index.html": "/tetris-react/index.html",
-    "main.dda991fc.css.map": "/tetris-react/static/css/main.dda991fc.css.map",
-    "main.852fce21.js.map": "/tetris-react/static/js/main.852fce21.js.map",
+    "main.0843e998.css.map": "/tetris-react/static/css/main.0843e998.css.map",
+    "main.ef64fb6f.js.map": "/tetris-react/static/js/main.ef64fb6f.js.map",
     "787.031b57d2.chunk.js.map": "/tetris-react/static/js/787.031b57d2.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.dda991fc.css",
-    "static/js/main.852fce21.js"
+    "static/css/main.0843e998.css",
+    "static/js/main.ef64fb6f.js"
   ]
 }

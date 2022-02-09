@@ -2,6 +2,9 @@
     width: 2.5vh;
     height: 2.5vh;
     margin: 0.1vh;
+}
+
+.empty {
     background-color: #61dafb;
 }
 

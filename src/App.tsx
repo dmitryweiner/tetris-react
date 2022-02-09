@@ -86,6 +86,10 @@ function App() {
   const [appState, setAppState] = useState<AppState>(getInitialAppState());
 
   const handleButtons = (userAction: USER_ACTION) => {
+    if (appState.gameState !== GAME_STATE.FALLING) {
+      return;
+    }
+
     setAppState((state) => {
       const figure = {
         ...state.figure
@@ -129,7 +133,7 @@ function App() {
   useEffect(() => {
     const intervalID = setInterval(() => {
       setAppState((state) => {
-        console.log("Tick", state);
+        //console.log("Tick", state);
         switch (state.gameState) {
           case GAME_STATE.FALLING: {
             const figure = {
