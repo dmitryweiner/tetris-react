@@ -116,7 +116,11 @@ function App() {
         }
         case USER_ACTION.MOVE_DOWN: {
           // TODO: move till touchdown
-          figure.y = figure.y + 2;
+          let newY = figure.y + 2;
+          if (!canPutFigureOnField(state.gameFieldWithoutCurrentFigure, figure.x, newY, figure.id, figure.orientation)) {
+            newY = figure.y + 1;
+          }
+          figure.y = newY;
           break;
         }
         case USER_ACTION.TURNING: {
@@ -203,7 +207,7 @@ function App() {
 
   return (
     <div className="App">
-      <h3>Tetris v0.5</h3>
+      <h3>Tetris v0.6</h3>
       <div className="upper-block">
         <div>
           Score: <b>{appState.score}</b>
